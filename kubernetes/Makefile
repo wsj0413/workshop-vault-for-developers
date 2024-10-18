@@ -2,6 +2,8 @@ minikube:
 	bash scripts/minikube.sh
 
 setup: minikube
+	helm repo add hashicorp https://helm.releases.hashicorp.com
+	helm repo update
 	helm upgrade --install vault hashicorp/vault -f helm/vault.yaml --namespace vault --create-namespace
 	kubectl --namespace vault rollout status deployment/vault-agent-injector
 	kubectl apply -f applications/payments-database.yaml
