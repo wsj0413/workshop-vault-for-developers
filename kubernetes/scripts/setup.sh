@@ -8,7 +8,7 @@ kubectl apply -n vault -f vault/
 
 kubectl rollout -n vault status deployment/vault-agent-injector
 
-kubectl port-forward -n vault svc/vault 8200:8200 &
+kubectl port-forward -n vault svc/vault 8200:8200 --address='0.0.0.0' &
 pgrep kubectl > pidfile
 
 wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
