@@ -11,6 +11,10 @@ kubectl rollout -n vault status deployment/vault-agent-injector
 kubectl port-forward -n vault svc/vault 8200:8200 &
 pgrep kubectl > pidfile
 
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install vault
+
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_TOKEN='some-root-token'
 
