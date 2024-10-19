@@ -1,6 +1,16 @@
 minikube:
 	bash scripts/minikube.sh
 
+init:
+	wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+	echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+	sudo apt update && sudo apt install vault
+	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+	sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+	helm repo add hashicorp https://helm.releases.hashicorp.com
+	helm repo update
+	sudo sysctl -w fs.inotify.max_user_instances=256 # fix:failed to create fsnotify watcher: too many open files
+
 setup: minikube
 	helm repo add hashicorp https://helm.releases.hashicorp.com
 	helm repo update
