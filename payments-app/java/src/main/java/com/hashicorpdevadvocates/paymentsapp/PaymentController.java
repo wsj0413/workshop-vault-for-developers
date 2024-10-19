@@ -21,6 +21,7 @@ class PaymentController {
 	private final JdbcClient db;
 	private final PaymentProcessorClient paymentProcessor;
 	private final VaultTransit vaultTransit;
+	private final PaymentsAppProperties paymentsAppProperties;
 
 	PaymentController(DataSource dataSource,
 					  WebClient client,
@@ -29,10 +30,14 @@ class PaymentController {
 		this.db = JdbcClient.create(dataSource);
 		this.paymentProcessor = new PaymentProcessorClient(client);
 		this.vaultTransit = new VaultTransit(paymentsAppProperties, vaultTemplate);
+		this.paymentsAppProperties = paymentsAppProperties;
 	}
 
 	@GetMapping("/payments")
 	Collection<Payment> getPayments() {
+		log.info("Username:{}",paymentsAppProperties.getProcessor().getUsername());
+        	log.info("Password:{}",paymentsAppProperties.getProcessor().getPassword());
+		
 		return this.db
 				.sql("SELECT * FROM payments")
 				.query((rs, rowNum) -> new Payment(
