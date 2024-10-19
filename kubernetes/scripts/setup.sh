@@ -4,6 +4,8 @@ set -e -o pipefail
 
 mkdir -p ./certs
 
+sudo sysctl -w fs.inotify.max_user_instances=256 # fix:failed to create fsnotify watcher: too many open files
+
 kubectl apply -n vault -f vault/
 
 kubectl rollout -n vault status deployment/vault-agent-injector
