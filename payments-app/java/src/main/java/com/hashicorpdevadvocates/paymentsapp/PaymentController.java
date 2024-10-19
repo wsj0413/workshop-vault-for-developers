@@ -35,8 +35,8 @@ class PaymentController {
 
 	@GetMapping("/payments")
 	Collection<Payment> getPayments() {
-		log.info("Username:{}",paymentsAppProperties.getProcessor().getUsername());
-        	log.info("Password:{}",paymentsAppProperties.getProcessor().getPassword());
+		System.out.println("Username: "+paymentsAppProperties.getProcessor().getUsername());
+		System.out.println("Password: "+paymentsAppProperties.getProcessor().getPassword());	
 		
 		return this.db
 				.sql("SELECT * FROM payments")
