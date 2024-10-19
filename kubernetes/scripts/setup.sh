@@ -4,8 +4,6 @@ set -e -o pipefail
 
 mkdir -p ./certs
 
-sudo sysctl -w fs.inotify.max_user_instances=256 # fix:failed to create fsnotify watcher: too many open files
-
 kubectl apply -n vault -f vault/
 
 kubectl rollout -n vault status deployment/vault-agent-injector
@@ -15,10 +13,6 @@ pgrep kubectl > pidfile
 
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_TOKEN='some-root-token'
-
-wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update && sudo apt install vault
 
 until vault status
 do
